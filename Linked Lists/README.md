@@ -1,3 +1,3 @@
 # Linked Lists
-## Singly linked list
-## doubley linked list
+1. Singly linked list
+2. Doubley linked list
