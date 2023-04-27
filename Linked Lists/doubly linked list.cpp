@@ -1,107 +1,102 @@
-
-#include <iostream>
-
+#include<iostream>
 using namespace std;
 
-// Doubly Linked List
-// NULL <=> A <=> B <=> C <=> D <=> NULL
-
-struct DListNode
-{
+class node{
+    public:
     int data;
-    DListNode *prev; // pointer
-    DListNode *next; // pointer
+    node* next;
+    node* previous;
+    
+    node(int val)
+    {
+        data=val;
+        next=NULL;
+        previous=NULL;
+    }
 };
 
-class doublelinkedlist
+void insert_at_head(node* &head,int val)
 {
-private:
-    DListNode *head;
-
-public:
-    doublelinkedlist()
+    node* n= new node(val);
+    n->next=head;
+    if(head!=NULL)
     {
-        head = NULL;
+    head->previous=n;
     }
+    head=n;
+}
 
-    void display();
-    void insertAtBegining(int value);
-    void insertAtEnd(int value);
-    void insertAtIndex(int value, int index);
-    void deleteNode(int index);
-};
-void doublelinkedlist::display()
+void insert_at_tail(node* &head,int val)
 {
-    DListNode *current = head;
-
-    cout << "NULL<=>"<< current->data << "<=>";
-    do
+    node* n=new node(val);
+    if(head==NULL)
     {
-        current = current->next;
-        cout << current->data << "<=>";
-    } while (current->next != NULL);
-    cout <<"NULL"<< endl;
+        //head=n;
+        insert_at_head(head,val);
+        return;
+    }
+    node* temp=head;
+    while(temp->next!=NULL)
+    {
+        temp=temp->next;
+    }
+    temp->next=n;
+    n->previous=temp;
 }
 
-void doublelinkedlist::insertAtBegining(int d)
+void insert_at_pos(node* &head,int val,int pos)
 {
-    DListNode *newNode = new DListNode;
-    newNode->prev = NULL;
-    newNode->data = d;
-    newNode->next = head;
-
-    head = newNode;
+    node* n=new node(val);
+    node* temp=head;
+    node* po=temp->next;
+    
+    if(head==NULL || pos==1)
+    {
+        insert_at_head(head,val);
+        return;
+    }
+   
+    int count=2;
+    while(count!=pos)
+    {
+       temp=temp->next;
+        if(temp->next==NULL)
+    {
+        insert_at_tail(head,val);
+        return;
+    }
+       po=po->next;
+      count++;
+    }
+   
+    temp->next=n;
+    n->previous=temp;
+    n->next=po;
+    po->previous=n;
+    
 }
 
-void doublelinkedlist::insertAtEnd(int d){
-    DListNode *newNode = new DListNode;
-    newNode->prev = NULL;
-    newNode->data = d;
-    newNode->next = NULL;
-
-    DListNode *current = head;
-
-    while(current->next != NULL){
-        current = current->next;
+void display(node* head)
+{
+    node* temp=head;
+    while(temp!=NULL)
+    {
+        cout<<""<<temp->data<<"-> ";
+        temp=temp->next;
     }
-    newNode->prev = current;
-    current->next = newNode;
-}
-
-void doublelinkedlist::insertAtIndex(int d, int index){
-    DListNode *newNode = new DListNode;
-    newNode->prev = NULL;
-    newNode->data = d;
-    newNode->next = NULL;
-
-    DListNode *current = head;
-
-    for(int i=1;i<index;i++){
-        current = current->next;
-    }
-    // ptr → next = temp → next; 
-    // ptr → prev = temp;
-    // temp → next = ptr;  
-    // temp → next → prev = ptr;  
-    newNode->next = current->next;
-    newNode->prev = current;
-    current->next = newNode;
-    current->next->prev = newNode;
-
+    cout<<"NULL"<<endl;
 }
 
 int main()
 {
-    doublelinkedlist dli;
-    dli.insertAtBegining(5);
-    dli.insertAtBegining(4);
-    dli.insertAtBegining(3);
-    dli.insertAtBegining(2);
-    dli.insertAtBegining(1);
-    dli.display();
-    dli.insertAtIndex(10,1);
-    dli.display();
-    dli.insertAtEnd(20);
-    dli.display();
-    return 0;
+    node* head=NULL;
+    insert_at_tail(head,1);
+    insert_at_tail(head,2);
+    insert_at_tail(head,3);
+    insert_at_tail(head,4);
+    insert_at_tail(head,6);
+    insert_at_tail(head,7);
+    insert_at_pos(head,5,8);
+    insert_at_pos(head,8,7);
+    display(head);
 }
